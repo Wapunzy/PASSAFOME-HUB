@@ -54,20 +54,31 @@ miniBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 miniBtn.TextSize = 35
 miniBtn.Font = Enum.Font.SourceSansBold
 
--- [ BOTÃO PARA REABRIR (VERSÃO SEM NEON) ]
+-- [ BOTÃO PARA REABRIR - VERSÃO DARK FOSCA ]
 local openBtn = Instance.new("TextButton", sg)
 openBtn.Name = "OpenButton"
 openBtn.Visible = false
 openBtn.Size = UDim2.new(0, 150, 0, 38)
 openBtn.Position = UDim2.new(0.5, -75, 0, 20)
-openBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-openBtn.BackgroundTransparency = 0.2
+
+-- CORES FOSCAS (Sem efeito neon):
+openBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 30) -- Fundo quase preto
+openBtn.TextColor3 = Color3.fromRGB(200, 200, 200)   -- Texto cinza claro
+
+openBtn.BackgroundTransparency = 0.1
 openBtn.Text = "PASSAFOME HUB"
-openBtn.TextColor3 = Color3.fromRGB(230, 230, 230)
 openBtn.Font = Enum.Font.GothamBold
 openBtn.TextSize = 13
 openBtn.Draggable = true
+
+-- Arredondamento suave
 Instance.new("UICorner", openBtn).CornerRadius = UDim.new(0, 6)
+
+-- Borda vermelha escura e sutil (apenas para detalhe)
+local bordinha = Instance.new("UIStroke", openBtn)
+bordinha.Color = Color3.fromRGB(120, 0, 0) -- Vermelho escuro, não brilha
+bordinha.Thickness = 1.8
+
 
 -- Lógica de Esconder/Mostrar
 miniBtn.MouseButton1Click:Connect(function()
