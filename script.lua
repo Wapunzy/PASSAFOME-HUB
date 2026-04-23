@@ -1,3 +1,4 @@
+-- PASSAFOME HUB V2 ULTRA ELITE (FINAL FIX)
 local UIS = game:GetService("UserInputService")
 local RS = game:GetService("ReplicatedStorage")
 local CG = game:GetService("CoreGui")
@@ -42,22 +43,19 @@ title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
--- [ BOTÕES DE CONTROLE ]
+-- Botões de Controle (Minimizar e Fechar)
 local btnContainer = Instance.new("Frame", main)
 btnContainer.Size = UDim2.new(0, 70, 0, 30)
 btnContainer.Position = UDim2.new(1, -75, 0, 5)
 btnContainer.BackgroundTransparency = 1
 
--- Botão Minimizar (Quadrado)
 local mini = Instance.new("TextButton", btnContainer)
 mini.Text = "▢"
 mini.Size = UDim2.new(0, 30, 0, 30)
-mini.Position = UDim2.new(0, 0, 0, 0)
 mini.BackgroundTransparency = 1
 mini.TextColor3 = Color3.fromRGB(200, 200, 200)
 mini.TextSize = 18
 
--- Botão Fechar (X)
 local close = Instance.new("TextButton", btnContainer)
 close.Text = "✕"
 close.Size = UDim2.new(0, 30, 0, 30)
@@ -66,7 +64,7 @@ close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255, 80, 80)
 close.TextSize = 18
 
--- [ UI DE CONFIRMAÇÃO (MODAL) ]
+-- Modal de Confirmação
 local confirmFrame = Instance.new("Frame", sg)
 confirmFrame.Size = UDim2.new(0, 220, 0, 100)
 confirmFrame.Position = UDim2.new(0.5, -110, 0.5, -50)
@@ -100,23 +98,18 @@ btnNao.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 btnNao.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", btnNao)
 
--- Lógica dos botões da Modal
 close.MouseButton1Click:Connect(function() confirmFrame.Visible = true end)
 btnNao.MouseButton1Click:Connect(function() confirmFrame.Visible = false end)
 btnSim.MouseButton1Click:Connect(function() sg:Destroy() end)
 
--- Lógica de Minimizar
 local minimized = false
 mini.MouseButton1Click:Connect(function()
     minimized = not minimized
     main.Visible = not minimized
-    -- Se minimizar, fecha a confirmação por segurança
     confirmFrame.Visible = false
 end)
 
--- ==========================================
--- FUNÇÃO DE CRIAR BOTÕES DE FARM
--- ==========================================
+-- Função de Botões de Farm
 local function CriarBotao(nome, posicaoY, idRecompensa)
     local ativo = false
     local btn = Instance.new("TextButton", main)
@@ -157,12 +150,33 @@ CriarBotao("LUCKY SPIN", 60, 1)
 CriarBotao("SPIN HABILIDADE", 115, 4)
 CriarBotao("AUTO YEN", 170, 2)
 
--- ==========================================
--- MOVIMENTAÇÃO (DRAG)
--- ==========================================
+-- MOVIMENTAÇÃO (DRAG) - CORRIGIDO
 local dragging, dragInput, dragStart, startPos
 main.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
-        startPos = main
+        startPos = main.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Tecla INSERT
+UIS.InputBegan:Connect(function(input, gpe)
+    if not gpe and input.KeyCode == Enum.KeyCode.Insert then
+        main.Visible = not main.Visible
+        confirmFrame.Visible = false
+    end
+end)
