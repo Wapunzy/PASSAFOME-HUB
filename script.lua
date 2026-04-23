@@ -1,9 +1,9 @@
--- PASSAFOME HUB V2 (FIXED FINAL COM TODOS OS ENDS)
+-- PASSAFOME HUB V2 (ULTRA STABLE VERSION)
 local UIS = game:GetService("UserInputService")
 local RS = game:GetService("ReplicatedStorage")
 local CG = game:GetService("CoreGui")
 
--- Limpeza para evitar duplicidade
+-- Limpeza para evitar erros de execução duplicada
 if CG:FindFirstChild("PassafomeHub_Ultra") then
     CG:FindFirstChild("PassafomeHub_Ultra"):Destroy()
 end
@@ -18,7 +18,7 @@ local main = Instance.new("Frame")
 main.Name = "Main"
 main.Size = UDim2.new(0, 280, 0, 260)
 main.Position = UDim2.new(0.5, -140, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true 
@@ -28,7 +28,7 @@ local corner = Instance.new("UICorner", main)
 corner.CornerRadius = UDim.new(0, 10)
 
 local stroke = Instance.new("UIStroke", main)
-stroke.Color = Color3.fromRGB(255, 0, 0)
+stroke.Color = Color3.fromRGB(200, 0, 0)
 stroke.Thickness = 2
 
 -- Título
@@ -45,6 +45,7 @@ title.TextXAlignment = Enum.TextXAlignment.Left
 
 -- [ BOTÃO MINIMIZAR ]
 local miniBtn = Instance.new("TextButton", main)
+miniBtn.Name = "Minimize"
 miniBtn.Text = "-"
 miniBtn.Size = UDim2.new(0, 30, 0, 30)
 miniBtn.Position = UDim2.new(1, -35, 0, 5)
@@ -53,20 +54,20 @@ miniBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 miniBtn.TextSize = 35
 miniBtn.Font = Enum.Font.SourceSansBold
 
--- [ BOTÃO PARA REABRIR ]
+-- [ BOTÃO PARA REABRIR (VERSÃO SEM NEON) ]
 local openBtn = Instance.new("TextButton", sg)
 openBtn.Name = "OpenButton"
 openBtn.Visible = false
-openBtn.Size = UDim2.new(0, 150, 0, 40)
+openBtn.Size = UDim2.new(0, 150, 0, 38)
 openBtn.Position = UDim2.new(0.5, -75, 0, 20)
-openBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+openBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+openBtn.BackgroundTransparency = 0.2
 openBtn.Text = "PASSAFOME HUB"
-openBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+openBtn.TextColor3 = Color3.fromRGB(230, 230, 230)
 openBtn.Font = Enum.Font.GothamBold
-openBtn.TextSize = 14
+openBtn.TextSize = 13
 openBtn.Draggable = true
-Instance.new("UICorner", openBtn)
-Instance.new("UIStroke", openBtn).Color = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", openBtn).CornerRadius = UDim.new(0, 6)
 
 -- Lógica de Esconder/Mostrar
 miniBtn.MouseButton1Click:Connect(function()
@@ -85,7 +86,7 @@ local function CriarBotao(nome, posicaoY, idRecompensa)
     local btn = Instance.new("TextButton", main)
     btn.Size = UDim2.new(0, 230, 0, 45)
     btn.Position = UDim2.new(0.5, -115, 0, posicaoY)
-    btn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+    btn.BackgroundColor3 = Color3.fromRGB(160, 0, 0)
     btn.Text = nome .. ": OFF"
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.GothamBold
@@ -95,12 +96,14 @@ local function CriarBotao(nome, posicaoY, idRecompensa)
     Instance.new("UICorner", btn)
 
     task.spawn(function()
-        local success, remote = pcall(function()
-            return RS:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.7.0"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("SeasonService"):WaitForChild("RF"):WaitForChild("RequestRankedReward")
+        -- Procura o RemoteEvent de forma segura
+        local remote = nil
+        pcall(function()
+            remote = RS:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.7.0"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("SeasonService"):WaitForChild("RF"):WaitForChild("RequestRankedReward")
         end)
         
         while true do
-            if ativo and success then
+            if ativo and remote then
                 pcall(function() remote:InvokeServer(idRecompensa) end)
                 task.wait(3.6)
             else
@@ -111,12 +114,12 @@ local function CriarBotao(nome, posicaoY, idRecompensa)
 
     btn.MouseButton1Click:Connect(function()
         ativo = not ativo
-        btn.BackgroundColor3 = ativo and Color3.fromRGB(0, 160, 0) or Color3.fromRGB(180, 0, 0)
+        btn.BackgroundColor3 = ativo and Color3.fromRGB(0, 130, 0) or Color3.fromRGB(160, 0, 0)
         btn.Text = ativo and nome .. ": ON" or nome .. ": OFF"
     end)
-end -- <--- ESSE END AQUI QUE FALTAVA!
+end
 
--- Criando os botões (Agora chama a função corretamente)
+-- Chamadas da função
 CriarBotao("LUCKY SPIN", 65, 1)
 CriarBotao("SPIN HABILIDADE", 125, 4)
 CriarBotao("AUTO YEN", 185, 2)
