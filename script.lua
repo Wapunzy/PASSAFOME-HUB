@@ -1,4 +1,3 @@
--- PASSAFOME HUB V2 ULTRA ELITE (PRO VERSION)
 local UIS = game:GetService("UserInputService")
 local RS = game:GetService("ReplicatedStorage")
 local CG = game:GetService("CoreGui")
