@@ -43,71 +43,31 @@ title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
--- Botões de Controle (Minimizar e Fechar)
+-- -- Botões de Controle (Versão Compatível)
 local btnContainer = Instance.new("Frame", main)
 btnContainer.Size = UDim2.new(0, 70, 0, 30)
 btnContainer.Position = UDim2.new(1, -75, 0, 5)
 btnContainer.BackgroundTransparency = 1
 
+-- Botão Minimizar (Agora com "-" universal)
 local mini = Instance.new("TextButton", btnContainer)
-mini.Text = "-"
+mini.Text = "-" 
 mini.Size = UDim2.new(0, 30, 0, 30)
 mini.BackgroundTransparency = 1
-mini.TextColor3 = Color3.fromRGB(200, 200, 200)
-mini.TextSize = 18
+mini.TextColor3 = Color3.fromRGB(255, 255, 255)
+mini.TextSize = 25
+mini.Font = Enum.Font.GothamBold
 
+-- Botão Fechar (Agora com "X" comum)
 local close = Instance.new("TextButton", btnContainer)
 close.Text = "X"
 close.Size = UDim2.new(0, 30, 0, 30)
 close.Position = UDim2.new(0, 35, 0, 0)
 close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255, 80, 80)
-close.TextSize = 18
+close.TextSize = 20
+close.Font = Enum.Font.GothamBold
 
--- Modal de Confirmação
-local confirmFrame = Instance.new("Frame", sg)
-confirmFrame.Size = UDim2.new(0, 220, 0, 100)
-confirmFrame.Position = UDim2.new(0.5, -110, 0.5, -50)
-confirmFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-confirmFrame.Visible = false
-confirmFrame.ZIndex = 10
-Instance.new("UICorner", confirmFrame)
-Instance.new("UIStroke", confirmFrame).Color = Color3.fromRGB(255, 255, 255)
-
-local confirmText = Instance.new("TextLabel", confirmFrame)
-confirmText.Text = "Deseja fechar o script?"
-confirmText.Size = UDim2.new(1, 0, 0, 40)
-confirmText.TextColor3 = Color3.new(1,1,1)
-confirmText.BackgroundTransparency = 1
-confirmText.Font = Enum.Font.GothamMedium
-confirmText.TextSize = 14
-
-local btnSim = Instance.new("TextButton", confirmFrame)
-btnSim.Text = "Sim"
-btnSim.Size = UDim2.new(0, 80, 0, 30)
-btnSim.Position = UDim2.new(0.1, 0, 0.6, 0)
-btnSim.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-btnSim.TextColor3 = Color3.new(1,1,1)
-Instance.new("UICorner", btnSim)
-
-local btnNao = Instance.new("TextButton", confirmFrame)
-btnNao.Text = "Não"
-btnNao.Size = UDim2.new(0, 80, 0, 30)
-btnNao.Position = UDim2.new(0.55, 0, 0.6, 0)
-btnNao.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-btnNao.TextColor3 = Color3.new(1,1,1)
-Instance.new("UICorner", btnNao)
-
-close.MouseButton1Click:Connect(function() confirmFrame.Visible = true end)
-btnNao.MouseButton1Click:Connect(function() confirmFrame.Visible = false end)
-btnSim.MouseButton1Click:Connect(function() sg:Destroy() end)
-
-local minimized = false
-mini.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    main.Visible = not minimized
-    confirmFrame.Visible = false
-end)
 
 -- Função de Botões de Farm
 local function CriarBotao(nome, posicaoY, idRecompensa)
