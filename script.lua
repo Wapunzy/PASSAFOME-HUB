@@ -1,9 +1,9 @@
--- PASSAFOME HUB V2 (FIX TOTAL DE TEXTO)
+-- PASSAFOME HUB V2 (WHITE TEXT & PARENT FIX)
 local UIS = game:GetService("UserInputService")
 local RS = game:GetService("ReplicatedStorage")
 local CG = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
 
--- Deleta se já existir
 if CG:FindFirstChild("PassafomeHub_Ultra") then
     CG:FindFirstChild("PassafomeHub_Ultra"):Destroy()
 end
@@ -11,92 +11,81 @@ end
 local sg = Instance.new("ScreenGui")
 sg.Name = "PassafomeHub_Ultra"
 sg.Parent = CG
-sg.IgnoreGuiInset = true
+sg.ResetOnSpawn = false
 
 local main = Instance.new("Frame")
 main.Name = "Main"
 main.Size = UDim2.new(0, 280, 0, 260)
 main.Position = UDim2.new(0.5, -140, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 main.BorderSizePixel = 0
 main.Active = true
-main.Draggable = true -- Ativa movimentação nativa simples
+main.Draggable = true
 main.Parent = sg
+
+local corner = Instance.new("UICorner", main)
+corner.CornerRadius = UDim.new(0, 10)
 
 local stroke = Instance.new("UIStroke", main)
 stroke.Color = Color3.fromRGB(255, 0, 0)
 stroke.Thickness = 2
 
--- Título Simples
 local title = Instance.new("TextLabel")
-title.Text = "PASSAFOME HUB V2"
-title.Size = UDim2.new(1, 0, 0, 40)
+title.Text = "PASSAFOME HUB ᴠ2"
+title.Size = UDim2.new(1, -70, 0, 40)
+title.Position = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 20
-title.Font = Enum.Font.SourceSansBold
+title.TextColor3 = Color3.fromRGB(255, 255, 255) -- BRANCO
+title.Font = Enum.Font.GothamBold
+title.TextSize = 16
+title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
--- Botões de Controle
-local mini = Instance.new("TextButton", main)
-mini.Text = "-"
-mini.Size = UDim2.new(0, 30, 0, 30)
-mini.Position = UDim2.new(1, -70, 0, 5)
-mini.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-mini.TextColor3 = Color3.fromRGB(255, 255, 255)
-mini.Parent = main
+-- CONTROLES
+local btnContainer = Instance.new("Frame", main)
+btnContainer.Size = UDim2.new(0, 75, 0, 30)
+btnContainer.Position = UDim2.new(1, -80, 0, 5)
+btnContainer.BackgroundTransparency = 1
 
-local close = Instance.new("TextButton", main)
+local mini = Instance.new("TextButton", btnContainer)
+mini.Text = "-" 
+mini.Size = UDim2.new(0, 30, 0, 30)
+mini.BackgroundTransparency = 1
+mini.TextColor3 = Color3.fromRGB(255, 255, 255) -- BRANCO
+mini.TextSize = 30
+mini.Font = Enum.Font.SourceSansBold
+
+local close = Instance.new("TextButton", btnContainer)
 close.Text = "X"
 close.Size = UDim2.new(0, 30, 0, 30)
-close.Position = UDim2.new(1, -35, 0, 5)
-close.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-close.TextColor3 = Color3.fromRGB(255, 255, 255)
-close.Parent = main
+close.Position = UDim2.new(0, 40, 0, 0)
+close.BackgroundTransparency = 1
+close.TextColor3 = Color3.fromRGB(255, 80, 80)
+close.TextSize = 22
+close.Font = Enum.Font.SourceSansBold
 
--- Função de criar botões
-local function CriarBotao(nome, posicaoY, idRecompensa)
-    local ativo = false
-    local btn = Instance.new("TextButton", main)
-    btn.Size = UDim2.new(0, 220, 0, 45)
-    btn.Position = UDim2.new(0.5, -110, 0, posicaoY)
-    btn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-    
-    -- CONFIGURAÇÃO FORÇADA DE TEXTO
-    btn.Text = nome .. ": OFF"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 18
-    btn.Font = Enum.Font.SourceSansBold
-    btn.ZIndex = 10 -- Garante que o texto fique na frente
-    
-    btn.Parent = main
+-- [ JANELA DE CONFIRMAÇÃO CORRIGIDA ]
+local confirmFrame = Instance.new("Frame")
+confirmFrame.Name = "ConfirmFrame"
+confirmFrame.Parent = sg
+confirmFrame.Size = UDim2.new(0, 220, 0, 110)
+confirmFrame.Position = UDim2.new(0.5, -110, 0.5, -55)
+confirmFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+confirmFrame.Visible = false
+confirmFrame.ZIndex = 20
+Instance.new("UICorner", confirmFrame)
+local confirmStroke = Instance.new("UIStroke", confirmFrame)
+confirmStroke.Color = Color3.fromRGB(255, 255, 255)
 
-    -- Lógica do Farm
-    task.spawn(function()
-        while true do
-            if ativo then
-                pcall(function()
-                    local remote = RS:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.7.0"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("SeasonService"):WaitForChild("RF"):WaitForChild("RequestRankedReward")
-                    remote:InvokeServer(idRecompensa)
-                end)
-                task.wait(3.5 + (math.random(0, 500) / 1000))
-            else
-                task.wait(0.5)
-            end
-        end
-    end)
+local confirmText = Instance.new("TextLabel")
+confirmText.Parent = confirmFrame -- FIX: Definindo o pai
+confirmText.Text = "FECHAR SCRIPT?"
+confirmText.Size = UDim2.new(1, 0, 0, 50)
+confirmText.TextColor3 = Color3.fromRGB(255, 255, 255) -- BRANCO
+confirmText.BackgroundTransparency = 1
+confirmText.Font = Enum.Font.GothamBold
+confirmText.TextSize = 16
+confirmText.ZIndex = 21
 
-    btn.MouseButton1Click:Connect(function()
-        ativo = not ativo
-        btn.BackgroundColor3 = ativo and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(180, 0, 0)
-        btn.Text = ativo and nome .. ": ON" or nome .. ": OFF"
-    end)
-end
-
-CriarBotao("LUCKY SPIN", 60, 1)
-CriarBotao("SPIN HABILIDADE", 115, 4)
-CriarBotao("AUTO YEN", 170, 2)
-
--- Lógica simples de fechar/minimizar
-close.MouseButton1Click:Connect(function() sg:Destroy() end)
-mini.MouseButton1Click:Connect(function() main.Visible = not main.Visible end)
+local btnSim = Instance.new("TextButton")
+btnSim.
