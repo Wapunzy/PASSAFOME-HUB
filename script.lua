@@ -1,10 +1,10 @@
--- PASSAFOME HUB V2 ULTRA ELITE (FINAL FIX)
+-- PASSAFOME HUB V2 ULTRA ELITE (FULL FIXED VERSION)
 local UIS = game:GetService("UserInputService")
 local RS = game:GetService("ReplicatedStorage")
 local CG = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 
--- Limpeza de segurança
+-- Limpeza de segurança para evitar duplicatas
 if CG:FindFirstChild("PassafomeHub_Ultra") then
     CG:FindFirstChild("PassafomeHub_Ultra"):Destroy()
 end
@@ -35,7 +35,7 @@ stroke.Thickness = 2
 local title = Instance.new("TextLabel")
 title.Text = "PASSAFOME HUB ᴠ2"
 title.Size = UDim2.new(1, -70, 0, 40)
-title.Position = UDim2.new(0, 10, 0, 0)
+title.Position = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
@@ -43,38 +43,86 @@ title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
--- -- Botões de Controle (Versão Compatível)
+-- [ BOTÕES DE CONTROLE NO TOPO ]
 local btnContainer = Instance.new("Frame", main)
-btnContainer.Size = UDim2.new(0, 70, 0, 30)
-btnContainer.Position = UDim2.new(1, -75, 0, 5)
+btnContainer.Size = UDim2.new(0, 75, 0, 30)
+btnContainer.Position = UDim2.new(1, -80, 0, 5)
 btnContainer.BackgroundTransparency = 1
 
--- Botão Minimizar (Agora com "-" universal)
+-- Botão Minimizar (-)
 local mini = Instance.new("TextButton", btnContainer)
 mini.Text = "-" 
 mini.Size = UDim2.new(0, 30, 0, 30)
+mini.Position = UDim2.new(0, 0, 0, 0)
 mini.BackgroundTransparency = 1
 mini.TextColor3 = Color3.fromRGB(255, 255, 255)
-mini.TextSize = 25
-mini.Font = Enum.Font.GothamBold
+mini.TextSize = 30
+mini.Font = Enum.Font.SourceSansBold
 
--- Botão Fechar (Agora com "X" comum)
+-- Botão Fechar (X)
 local close = Instance.new("TextButton", btnContainer)
 close.Text = "X"
 close.Size = UDim2.new(0, 30, 0, 30)
-close.Position = UDim2.new(0, 35, 0, 0)
+close.Position = UDim2.new(0, 40, 0, 0)
 close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255, 80, 80)
-close.TextSize = 20
-close.Font = Enum.Font.GothamBold
+close.TextSize = 22
+close.Font = Enum.Font.SourceSansBold
 
+-- [ UI DE CONFIRMAÇÃO ]
+local confirmFrame = Instance.new("Frame", sg)
+confirmFrame.Size = UDim2.new(0, 220, 0, 110)
+confirmFrame.Position = UDim2.new(0.5, -110, 0.5, -55)
+confirmFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+confirmFrame.Visible = false
+confirmFrame.ZIndex = 10
+Instance.new("UICorner", confirmFrame)
+Instance.new("UIStroke", confirmFrame).Color = Color3.fromRGB(255, 255, 255)
 
--- Função de Botões de Farm
+local confirmText = Instance.new("TextLabel", confirmFrame)
+confirmText.Text = "Você tem certeza que deseja\nfechar o script?"
+confirmText.Size = UDim2.new(1, 0, 0, 50)
+confirmText.TextColor3 = Color3.new(1,1,1)
+confirmText.BackgroundTransparency = 1
+confirmText.Font = Enum.Font.GothamMedium
+confirmText.TextSize = 14
+
+local btnSim = Instance.new("TextButton", confirmFrame)
+btnSim.Text = "Sim"
+btnSim.Size = UDim2.new(0, 85, 0, 35)
+btnSim.Position = UDim2.new(0.08, 0, 0.6, 0)
+btnSim.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+btnSim.TextColor3 = Color3.new(1,1,1)
+btnSim.Font = Enum.Font.GothamBold
+Instance.new("UICorner", btnSim)
+
+local btnNao = Instance.new("TextButton", confirmFrame)
+btnNao.Text = "Não"
+btnNao.Size = UDim2.new(0, 85, 0, 35)
+btnNao.Position = UDim2.new(0.55, 0, 0.6, 0)
+btnNao.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+btnNao.TextColor3 = Color3.new(1,1,1)
+btnNao.Font = Enum.Font.GothamBold
+Instance.new("UICorner", btnNao)
+
+-- [ LÓGICA DE CLIQUE CONTROLE ]
+close.MouseButton1Click:Connect(function() confirmFrame.Visible = true end)
+btnNao.MouseButton1Click:Connect(function() confirmFrame.Visible = false end)
+btnSim.MouseButton1Click:Connect(function() sg:Destroy() end)
+
+local minimized = false
+mini.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    main.Visible = not minimized
+    confirmFrame.Visible = false
+end)
+
+-- [ FUNÇÃO DE CRIAR BOTÕES DE FARM ]
 local function CriarBotao(nome, posicaoY, idRecompensa)
     local ativo = false
     local btn = Instance.new("TextButton", main)
-    btn.Size = UDim2.new(0, 220, 0, 45)
-    btn.Position = UDim2.new(0.5, -110, 0, posicaoY)
+    btn.Size = UDim2.new(0, 230, 0, 45)
+    btn.Position = UDim2.new(0.5, -115, 0, posicaoY)
     btn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
     btn.Text = nome .. ": OFF"
     btn.TextColor3 = Color3.new(1, 1, 1)
@@ -110,7 +158,7 @@ CriarBotao("LUCKY SPIN", 60, 1)
 CriarBotao("SPIN HABILIDADE", 115, 4)
 CriarBotao("AUTO YEN", 170, 2)
 
--- MOVIMENTAÇÃO (DRAG) - CORRIGIDO
+-- [ SISTEMA DE MOVIMENTAÇÃO (DRAG) ]
 local dragging, dragInput, dragStart, startPos
 main.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
