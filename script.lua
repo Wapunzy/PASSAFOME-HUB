@@ -50,14 +50,14 @@ btnContainer.Position = UDim2.new(1, -75, 0, 5)
 btnContainer.BackgroundTransparency = 1
 
 local mini = Instance.new("TextButton", btnContainer)
-mini.Text = "▢"
+mini.Text = "-"
 mini.Size = UDim2.new(0, 30, 0, 30)
 mini.BackgroundTransparency = 1
 mini.TextColor3 = Color3.fromRGB(200, 200, 200)
 mini.TextSize = 18
 
 local close = Instance.new("TextButton", btnContainer)
-close.Text = "✕"
+close.Text = "X"
 close.Size = UDim2.new(0, 30, 0, 30)
 close.Position = UDim2.new(0, 35, 0, 0)
 close.BackgroundTransparency = 1
