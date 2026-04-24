@@ -1,4 +1,4 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
 
 -- PASSAFOME HUB V2 (ULTRA STABLE VERSION)
 local UIS = game:GetService("UserInputService")
